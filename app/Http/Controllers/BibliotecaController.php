@@ -13,6 +13,7 @@ class BibliotecaController extends Controller
     {
         $libro = Biblioteca::all();
         $libros = Biblioteca::all();
+        $libros = Biblioteca::orderBy('created_at', 'DESC')->get();
         return view('biblioteca.index', compact('libros'));
     }
 
@@ -29,23 +30,28 @@ class BibliotecaController extends Controller
      */
     public function store(Request $request)
     {
+        // Validación de los datos
         $request->validate([
-            'titulo' => 'required|max:255',
-            'Autor' => 'required|max:255',
-            'Editorial' => 'required|max:255',
-            'precio' => 'required|max:255',
-            'libro_code' => 'required'
+            'titulo' => 'required|string|max:255',
+            'Autor' => 'required|string|max:255',
+            'Editorial' => 'required|string|max:255',
+            'precio' => 'required|string|max:255',
+            'libro_code' => 'required|string|max:255',
         ]);
-        
+
+        // Crear un nuevo registro en la base de datos
         $biblioteca = new Biblioteca();
-        $biblioteca->titulo = $request->input('titulo');
-        $biblioteca->Autor = $request->input('Autor'); // Asignar el valor del campo Autor del formulario
-        $biblioteca->Editorial = $request->input('Editorial');
-        $biblioteca->precio = $request->input('precio');
-        $biblioteca->libro_code = $request->input('libro_code');
+        $biblioteca->titulo = $request->titulo;
+        $biblioteca->Autor = $request->Autor;
+        $biblioteca->Editorial = $request->Editorial;
+        $biblioteca->precio = $request->precio;
+        $biblioteca->libro_code = $request->libro_code;
         $biblioteca->save();
-        return redirect()->route('biblioteca.index')->with('success', 'Biblioteca creada exitosamente');
-        //return redirect()->route('biblioteca.index');
+
+        // Redireccionar o devolver una respuesta
+        return redirect()->route('biblioteca.index')->with('success', 'Libro agregado exitosamente.');
+        return redirect()->route('biblioteca.index')->with('error', '¡Error al agregar el libro!');
+
     }
 
     /**
