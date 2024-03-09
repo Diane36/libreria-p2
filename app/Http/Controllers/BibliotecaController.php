@@ -59,7 +59,7 @@ class BibliotecaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('biblioteca.show', compact('biblioteca'));
     }
 
     /**
